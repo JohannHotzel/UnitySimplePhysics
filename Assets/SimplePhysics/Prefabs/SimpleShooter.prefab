@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
   projectilePrefab: {fileID: 510575962083206281, guid: dba61a6eb240a3448a07ab2610bb7813, type: 3}
-  speed: 50
+  speed: 25
   rotationSpeed: 10
   mass: 1
   scale: {x: 0.75, y: 0.75, z: 0.75}
