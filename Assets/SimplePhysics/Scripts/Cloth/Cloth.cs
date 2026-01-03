@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class Cloth : MonoBehaviour
@@ -15,6 +17,13 @@ public class Cloth : MonoBehaviour
     public bool showLineRenderers = true;
     public bool showMesh = true;
 
+    [Header("MeshCollider & Collision Response")]
+    public bool addMeshCollider = true;
+    public bool meshColliderConvex = false;
+    public bool relayCollisionImpulse = true;
+    public int impulseNearestN = 3;
+    public float impulseScale = 0.2f;
+
     private LineRenderer[] horizontalLines;
     private LineRenderer[] verticalLines;
 
@@ -22,6 +31,9 @@ public class Cloth : MonoBehaviour
     private Vector3[] vertices;
     private int[] triangles;
     private Vector2[] uvs;
+
+    Rigidbody[] bodies;
+    MeshCollider meshCol;
 
 
     public void Init(List<Transform> pts, int r, int c, Material lineMaterial, Material clothMaterial)
@@ -34,7 +46,11 @@ public class Cloth : MonoBehaviour
     }
     public void Awake()
     {
-        if(showLineRenderers)
+        bodies = new Rigidbody[points.Count];
+        for (int i = 0; i < points.Count; i++)
+            bodies[i] = points[i] ? points[i].GetComponent<Rigidbody>() : null;
+
+        if (showLineRenderers)
             CreateLineRenderers();
 
         if (showMesh)
@@ -43,6 +59,9 @@ public class Cloth : MonoBehaviour
             mr.sharedMaterial = clothMaterial;
             CreateMesh();
             UpdateMeshVertices();
+
+            if(addMeshCollider)
+                CreateMeshCollider();
         }
     }
     private void LateUpdate()
@@ -51,7 +70,13 @@ public class Cloth : MonoBehaviour
             UpdateLineRenderers();
 
         if (showMesh)
+        {
             UpdateMeshVertices();
+
+            if (addMeshCollider)
+                UpdateMeshCollider();
+        }
+            
     }
 
     // Line Renderers
@@ -189,4 +214,72 @@ public class Cloth : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
+    //MeshCollider and Collision Response
+    void CreateMeshCollider()
+    {
+        meshCol = GetComponent<MeshCollider>();
+        if (!meshCol) meshCol = gameObject.AddComponent<MeshCollider>();
+
+        meshCol.sharedMesh = mesh;
+        meshCol.convex = meshColliderConvex;
+
+        var parentCols = GetComponents<Collider>();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            var t = points[i];
+            if (!t) continue;
+
+            var pointCols = t.GetComponentsInChildren<Collider>();
+
+            for (int p = 0; p < parentCols.Length; p++)
+            {
+                var pc = parentCols[p];
+                if (!pc) continue;
+
+                for (int s = 0; s < pointCols.Length; s++)
+                {
+                    var sc = pointCols[s];
+                    if (!sc) continue;
+
+                    Physics.IgnoreCollision(sc, pc, true);
+                }
+            }
+        }
+    }
+    void UpdateMeshCollider()
+    {
+        if (meshCol == null || mesh == null) return;
+
+        meshCol.sharedMesh = null;
+        meshCol.sharedMesh = mesh;
+    }
+    void OnCollisionEnter(Collision c)
+    {
+        if(relayCollisionImpulse) RelayImpulse(c);
+    }
+    void RelayImpulse(Collision c)
+    {
+        if (bodies == null || bodies.Length == 0) return;
+        if (c.contactCount == 0) return;
+
+        Vector3 impulse = c.impulse * impulseScale;
+        if (impulse.sqrMagnitude < 1e-8f) return;
+
+        Vector3 p = c.contacts[0].point;
+
+        int n = Mathf.Min(impulseNearestN, bodies.Length);
+
+        var nearest = bodies
+            .Where(rb => rb != null && !rb.isKinematic)
+            .OrderBy(rb => (rb.worldCenterOfMass - p).sqrMagnitude)
+            .Take(n);
+
+        Vector3 per = impulse / n;
+
+        foreach (var rb in nearest)
+        {
+            rb.AddForceAtPosition(-per, p, ForceMode.Impulse);
+        }
+    }
 }

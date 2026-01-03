@@ -33,6 +33,7 @@ public class SoftMesh : MonoBehaviour
     [Header("MeshCollider & Collision Response")]
     public bool addMeshCollider = true;
     public bool meshColliderConvex = false;
+    public bool relayCollisionImpulse = true;
     public int impulseNearestN = 3;
     public float impulseScale = 0.2f;
 
@@ -340,7 +341,10 @@ public class SoftMesh : MonoBehaviour
     }
 
     // Collision Response for MeshCollider
-    void OnCollisionEnter(Collision c) => RelayImpulse(c);
+    void OnCollisionEnter(Collision c)
+    {
+        if (relayCollisionImpulse) RelayImpulse(c);
+    }
     void RelayImpulse(Collision c)
     {
         if (_bodies == null || _bodies.Length == 0) return;
