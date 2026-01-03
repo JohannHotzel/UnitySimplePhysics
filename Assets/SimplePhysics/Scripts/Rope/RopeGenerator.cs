@@ -100,7 +100,6 @@ public class RopeGenerator : MonoBehaviour
 
     }
 
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

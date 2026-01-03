@@ -8,14 +8,19 @@ public class Rope : MonoBehaviour
     private LineRenderer lr;
     public Material ropeMaterial;
 
+    [Header("Visibility")]
+    public bool showLineRenderers = true;
+
     public void Init(List<Transform> segs, Material material)
     {
         ropeMaterial = material;
         segments = segs;
     }
-
     private void Awake()
     {
+        if (!showLineRenderers)
+            return;
+
         lr = gameObject.AddComponent<LineRenderer>();
 
         lr.material = ropeMaterial;
@@ -27,22 +32,18 @@ public class Rope : MonoBehaviour
         lr.endWidth = 0.15f;
         lr.generateLightingData = true;
     }
-
     void LateUpdate()
     {
-        if (lr == null || segments == null || segments.Count == 0)
+        if (!showLineRenderers || lr == null || segments == null || segments.Count == 0)
             return;
 
         UpdateLine();
     }
-
+    
     void UpdateLine()
     {
         for (int i = 0; i < segments.Count; i++)
             lr.SetPosition(i, segments[i].position);
     }
-
-
-
-
+    
 }
