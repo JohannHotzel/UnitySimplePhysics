@@ -1,46 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class Rope : MonoBehaviour
 {
     public List<Transform> segments = new List<Transform>();
 
     private LineRenderer lr;
-    private Material ropeMaterial;
+    public Material ropeMaterial;
 
     public void Init(List<Transform> segs, Material material)
     {
-        segments = segs;
         ropeMaterial = material;
+        segments = segs;
+    }
 
-        lr = GetComponent<LineRenderer>();
+    private void Awake()
+    {
+        lr = gameObject.AddComponent<LineRenderer>();
+
         lr.material = ropeMaterial;
+        lr.positionCount = segments.Count;
+
+        lr.useWorldSpace = true;
+
         lr.startWidth = 0.15f;
         lr.endWidth = 0.15f;
         lr.generateLightingData = true;
     }
 
-    private void Awake()
+    void LateUpdate()
     {
-        lr = GetComponent<LineRenderer>();
-        lr.useWorldSpace = true;
-        lr.positionCount = segments.Count;
+        if (lr == null || segments == null || segments.Count == 0)
+            return;
 
-        
-
+        UpdateLine();
     }
 
-    private void LateUpdate()
+    void UpdateLine()
     {
-        if (lr == null || segments == null) return;
-
-        int n = segments.Count;
-        if (lr.positionCount != n) lr.positionCount = n;
-
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < segments.Count; i++)
             lr.SetPosition(i, segments[i].position);
     }
 
-   
+
+
+
 }

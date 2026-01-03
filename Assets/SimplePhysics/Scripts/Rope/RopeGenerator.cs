@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RopeGenerator : MonoBehaviour
 {
     public GameObject spherePrefab;
@@ -8,8 +9,16 @@ public class RopeGenerator : MonoBehaviour
     public float spacing = 0.25f;
     public Material ropeMaterial;
 
-    [Header("Opetions")]
-    public bool lockTwist = true;
+    [Header("Joint - Angular")]
+    public float angularStrength = 200f;
+    public float angularDamping = 10f;
+    public float angularMaxForce = Mathf.Infinity;
+
+    [Header("Joint - Projection")]
+    public bool useProjection = true;
+    public float projectionDistance = 0.01f;
+    public float projectionAngle = 1f;
+
 
     [ContextMenu("Generate Rope")]
     public void GenerateRope()
@@ -42,36 +51,55 @@ public class RopeGenerator : MonoBehaviour
 
 
             if (prev)
-            {
-                var j = seg.AddComponent<ConfigurableJoint>();
-                j.connectedBody = prev;
-
-                j.autoConfigureConnectedAnchor = true;
-                j.anchor = Vector3.zero;
-
-                j.xMotion = ConfigurableJointMotion.Locked;
-                j.yMotion = ConfigurableJointMotion.Locked;
-                j.zMotion = ConfigurableJointMotion.Locked;
-
-                j.angularXMotion = ConfigurableJointMotion.Free;
-                j.angularYMotion = ConfigurableJointMotion.Free;
-
-                if(lockTwist)
-                    j.angularZMotion = ConfigurableJointMotion.Locked;
-                else
-                    j.angularZMotion = ConfigurableJointMotion.Free;
-
-                j.enableCollision = false;
-                j.projectionMode = JointProjectionMode.PositionAndRotation;
-                j.projectionDistance = 0.01f;
-                j.projectionAngle = 1f;
-            }
-
+                CreateJoint(rb, prev);
+            
             prev = rb;
         }
 
         rope.Init(list, ropeMaterial);
     }
+    void CreateJoint(Rigidbody a, Rigidbody b)
+    {
+        var j = a.gameObject.AddComponent<ConfigurableJoint>();
+        j.connectedBody = b;
+        j.autoConfigureConnectedAnchor = true;
+        j.anchor = Vector3.zero;
+
+
+        if (useProjection)
+        {
+            j.projectionMode = JointProjectionMode.PositionAndRotation;
+            j.projectionDistance = projectionDistance;
+            j.projectionAngle = projectionAngle;
+        }
+        else
+        {
+            j.projectionMode = JointProjectionMode.None;
+        }
+
+
+        j.xMotion = ConfigurableJointMotion.Locked;
+        j.yMotion = ConfigurableJointMotion.Locked;
+        j.zMotion = ConfigurableJointMotion.Locked;
+
+
+        j.angularXMotion = ConfigurableJointMotion.Free;
+        j.angularYMotion = ConfigurableJointMotion.Free;
+        j.angularZMotion = ConfigurableJointMotion.Free;
+
+        j.rotationDriveMode = RotationDriveMode.Slerp;
+
+        j.slerpDrive = new JointDrive
+        {
+            positionSpring = angularStrength,
+            positionDamper = angularDamping,
+            maximumForce = angularMaxForce
+        };
+
+        j.targetRotation = Quaternion.identity;
+
+    }
+
 
     private void OnDrawGizmosSelected()
     {

@@ -540,11 +540,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3506866242460443443, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.99
+      value: 8.37
       objectReference: {fileID: 0}
     - target: {fileID: 3506866242460443443, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.27
+      value: -0.69
       objectReference: {fileID: 0}
     - target: {fileID: 3506866242460443443, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -577,6 +577,18 @@ PrefabInstance:
     - target: {fileID: 8835560226225669889, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
       propertyPath: m_Name
       value: RopeGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8900605553713935785, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
+      propertyPath: lockLinear
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8900605553713935785, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
+      propertyPath: angularDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8900605553713935785, guid: a0216e65e6a97344bb69bf141aa6aff7, type: 3}
+      propertyPath: angularStrength
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
