@@ -4,12 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class Cloth : MonoBehaviour
 {
+    [Header("RigidBodies")]
     public List<Transform> points = new List<Transform>();
     public int rows;
     public int cols;
 
+    [Header("Appearance")]
     public Material lineMaterial;
     public Material clothMaterial;
+    public bool showLineRenderers = true;
+    public bool showMesh = true;
 
     private LineRenderer[] horizontalLines;
     private LineRenderer[] verticalLines;
@@ -17,10 +21,6 @@ public class Cloth : MonoBehaviour
     private Mesh mesh;
     private Vector3[] vertices;
     private int[] triangles;
-
-    [Header("Visibility")]
-    public bool showLineRenderers = true;
-    public bool showMesh = true;
 
 
     public void Init(List<Transform> pts, int r, int c, Material lineMaterial, Material clothMaterial)

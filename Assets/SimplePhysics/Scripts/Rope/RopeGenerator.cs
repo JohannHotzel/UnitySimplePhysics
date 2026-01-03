@@ -5,12 +5,12 @@ using UnityEngine;
 public class RopeGenerator : MonoBehaviour
 {
     [Header("Rope")]
-    public GameObject spherePrefab;
+    public GameObject prefab;
     public int segments = 20;
     public float spacing = 0.25f;
 
     [Header("Appearance")]
-    public Material ropeMaterial;
+    public Material lineMaterial;
 
     [Header("Joint - Angular")]
     public float angularStrength = 200f;
@@ -26,7 +26,7 @@ public class RopeGenerator : MonoBehaviour
     [ContextMenu("Generate Rope")]
     public void GenerateRope()
     {
-        if (!spherePrefab)
+        if (!prefab)
         {
             Debug.LogError("Sphere Prefab not assigned");
             return;
@@ -36,14 +36,15 @@ public class RopeGenerator : MonoBehaviour
         parent.transform.SetParent(transform, false);
 
         var rope = parent.AddComponent<Rope>();
-        var list = new List<Transform>();
+        var list = new List<Transform>(segments);
 
         Rigidbody prev = null;
 
         for (int i = 0; i < segments; i++)
         {
-            var seg = Instantiate(spherePrefab, parent.transform);
+            var seg = Instantiate(prefab, parent.transform);
             seg.name = $"Seg_{i:00}";
+
             seg.transform.localPosition = Vector3.forward * (i * spacing);
             seg.transform.localRotation = Quaternion.identity;
 
@@ -59,7 +60,7 @@ public class RopeGenerator : MonoBehaviour
             prev = rb;
         }
 
-        rope.Init(list, ropeMaterial);
+        rope.Init(list, lineMaterial);
     }
     void CreateJoint(Rigidbody a, Rigidbody b)
     {
@@ -103,7 +104,7 @@ public class RopeGenerator : MonoBehaviour
 
     }
 
-
+    // Visualize in Editor
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
@@ -113,7 +114,7 @@ public class RopeGenerator : MonoBehaviour
 
         for (int i = 0; i < segments; i++)
         {
-            float localRadius = spherePrefab.transform.localScale.x * 0.5f;
+            float localRadius = prefab.transform.localScale.x * 0.5f;
 
             Vector3 localPos = Vector3.forward * (i * spacing);
             Vector3 worldPos = transform.TransformPoint(localPos);

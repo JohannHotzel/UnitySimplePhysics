@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class Rope : MonoBehaviour
 {
-    public List<Transform> segments = new List<Transform>();
-    private LineRenderer lr;
-
+    [Header("RigidBodies")]
+    public List<Transform> points = new List<Transform>();
+    
     [Header("Appearance")]
     public Material lineMaterial;
     public bool showLineRenderers = true;
 
+    private LineRenderer lr;
+
     public void Init(List<Transform> segs, Material material)
     {
         lineMaterial = material;
-        segments = segs;
+        points = segs;
     }
     private void Awake()
     {
@@ -23,7 +25,7 @@ public class Rope : MonoBehaviour
         lr = gameObject.AddComponent<LineRenderer>();
 
         lr.material = lineMaterial;
-        lr.positionCount = segments.Count;
+        lr.positionCount = points.Count;
 
         lr.useWorldSpace = true;
 
@@ -33,7 +35,7 @@ public class Rope : MonoBehaviour
     }
     void LateUpdate()
     {
-        if (!showLineRenderers || lr == null || segments == null || segments.Count == 0)
+        if (!showLineRenderers || lr == null || points == null || points.Count == 0)
             return;
 
         UpdateLine();
@@ -41,8 +43,8 @@ public class Rope : MonoBehaviour
     
     void UpdateLine()
     {
-        for (int i = 0; i < segments.Count; i++)
-            lr.SetPosition(i, segments[i].position);
+        for (int i = 0; i < points.Count; i++)
+            lr.SetPosition(i, points[i].position);
     }
     
 }

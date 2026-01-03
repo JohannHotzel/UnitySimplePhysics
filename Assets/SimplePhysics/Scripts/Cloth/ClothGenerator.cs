@@ -3,22 +3,31 @@ using UnityEngine;
 
 public class ClothGenerator : MonoBehaviour
 {
-    public GameObject spherePrefab;
-
     [Header("Cloth")]
+    public GameObject prefab;
     public int rows = 10;          
     public int cols = 20;          
     public float spacing = 0.25f;
 
-    [Header("Options")]
+    [Header("Appearance")]
     public Material lineMaterial;
-    public Material clothMaterial; 
+    public Material clothMaterial;
+
+    [Header("Joint - Angular")]
+    public float angularStrength = 200f;
+    public float angularDamping = 10f;
+    public float angularMaxForce = Mathf.Infinity;
+
+    [Header("Joint - Projection")]
+    public bool useProjection = true;
+    public float projectionDistance = 0.01f;
+    public float projectionAngle = 1f;
 
 
     [ContextMenu("Generate Cloth")]
     public void GenerateCloth()
     {
-        if (!spherePrefab)
+        if (!prefab)
         {
             Debug.LogError("Sphere Prefab not assigned");
             return;
@@ -36,10 +45,9 @@ public class ClothGenerator : MonoBehaviour
         {
             for (int c = 0; c < cols; c++)
             {
-                var seg = Instantiate(spherePrefab, parent.transform);
+                var seg = Instantiate(prefab, parent.transform);
                 seg.name = $"Seg_{r:00}_{c:00}";
 
-                // Grid in lokalem Raum: X nach rechts, -Y nach unten (damit es wie "hängendes" Cloth wirkt)
                 seg.transform.localPosition = new Vector3(c * spacing, -r * spacing, 0f);
                 seg.transform.localRotation = Quaternion.identity;
 
@@ -65,37 +73,55 @@ public class ClothGenerator : MonoBehaviour
 
         cloth.Init(list, rows, cols, lineMaterial, clothMaterial);
     }
-
-    private void CreateJoint(GameObject obj, Rigidbody connected)
+    private void CreateJoint(GameObject a, Rigidbody b)
     {
-        var j = obj.AddComponent<ConfigurableJoint>();
-        j.connectedBody = connected;
-
+        var j = a.gameObject.AddComponent<ConfigurableJoint>();
+        j.connectedBody = b;
         j.autoConfigureConnectedAnchor = true;
         j.anchor = Vector3.zero;
+
+
+        if (useProjection)
+        {
+            j.projectionMode = JointProjectionMode.PositionAndRotation;
+            j.projectionDistance = projectionDistance;
+            j.projectionAngle = projectionAngle;
+        }
+        else
+        {
+            j.projectionMode = JointProjectionMode.None;
+        }
+
 
         j.xMotion = ConfigurableJointMotion.Locked;
         j.yMotion = ConfigurableJointMotion.Locked;
         j.zMotion = ConfigurableJointMotion.Locked;
 
+
         j.angularXMotion = ConfigurableJointMotion.Free;
         j.angularYMotion = ConfigurableJointMotion.Free;
         j.angularZMotion = ConfigurableJointMotion.Free;
 
-        j.enableCollision = false;
+        j.rotationDriveMode = RotationDriveMode.Slerp;
 
-        j.projectionMode = JointProjectionMode.PositionAndRotation;
-        j.projectionDistance = 0.01f;
-        j.projectionAngle = 1f;
+        j.slerpDrive = new JointDrive
+        {
+            positionSpring = angularStrength,
+            positionDamper = angularDamping,
+            maximumForce = angularMaxForce
+        };
+
+        j.targetRotation = Quaternion.identity;
     }
 
+    // Visualize in Editor
     private void OnDrawGizmosSelected()
     {
-        if (!spherePrefab) return;
+        if (!prefab) return;
 
         Gizmos.color = Color.cyan;
 
-        float localRadius = spherePrefab.transform.localScale.x * 0.5f;
+        float localRadius = prefab.transform.localScale.x * 0.5f;
 
         for (int r = 0; r < rows; r++)
         {
@@ -120,4 +146,5 @@ public class ClothGenerator : MonoBehaviour
             }
         }
     }
+
 }
