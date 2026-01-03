@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class RopeGenerator : MonoBehaviour
 {
+    [Header("Rope")]
     public GameObject spherePrefab;
     public int segments = 20;
     public float spacing = 0.25f;
+
+    [Header("Appearance")]
     public Material ropeMaterial;
 
     [Header("Joint - Angular")]
@@ -99,6 +102,7 @@ public class RopeGenerator : MonoBehaviour
         j.targetRotation = Quaternion.identity;
 
     }
+
 
     private void OnDrawGizmosSelected()
     {

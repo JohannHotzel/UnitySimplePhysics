@@ -4,16 +4,15 @@ using UnityEngine;
 public class Rope : MonoBehaviour
 {
     public List<Transform> segments = new List<Transform>();
-
     private LineRenderer lr;
-    public Material ropeMaterial;
 
-    [Header("Visibility")]
+    [Header("Appearance")]
+    public Material lineMaterial;
     public bool showLineRenderers = true;
 
     public void Init(List<Transform> segs, Material material)
     {
-        ropeMaterial = material;
+        lineMaterial = material;
         segments = segs;
     }
     private void Awake()
@@ -23,7 +22,7 @@ public class Rope : MonoBehaviour
 
         lr = gameObject.AddComponent<LineRenderer>();
 
-        lr.material = ropeMaterial;
+        lr.material = lineMaterial;
         lr.positionCount = segments.Count;
 
         lr.useWorldSpace = true;

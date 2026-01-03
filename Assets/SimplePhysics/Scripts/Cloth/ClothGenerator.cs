@@ -5,9 +5,9 @@ public class ClothGenerator : MonoBehaviour
 {
     public GameObject spherePrefab;
 
-    [Header("Grid")]
-    public int rows = 10;          // Y
-    public int cols = 20;          // X
+    [Header("Cloth")]
+    public int rows = 10;          
+    public int cols = 20;          
     public float spacing = 0.25f;
 
     [Header("Options")]
