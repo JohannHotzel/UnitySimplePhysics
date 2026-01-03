@@ -420,7 +420,6 @@ MonoBehaviour:
   projectionDistance: 0.01
   projectionAngle: 1
   recalcNormals: 1
-  ignoreSelfMeshSphereCollision: 1
   addMeshCollider: 1
   meshColliderConvex: 1
   impulseNearestN: 3
@@ -487,13 +486,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 489831505}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.99434924, w: -0.10615875}
-  m_LocalPosition: {x: 0.96, y: 9.44, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.6899996, y: 9.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 192.188}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &537762462
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,7 +536,6 @@ MonoBehaviour:
   projectionDistance: 0.01
   projectionAngle: 1
   recalcNormals: 1
-  ignoreSelfMeshSphereCollision: 1
   addMeshCollider: 1
   meshColliderConvex: 1
   impulseNearestN: 3
@@ -605,7 +603,7 @@ Transform:
   m_GameObject: {fileID: 537762462}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.96579796, w: 0.25929582}
-  m_LocalPosition: {x: 0.09, y: 15.63, z: 0}
+  m_LocalPosition: {x: -0.5300002, y: 20.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -703,7 +701,6 @@ MonoBehaviour:
   projectionDistance: 0.01
   projectionAngle: 1
   recalcNormals: 1
-  ignoreSelfMeshSphereCollision: 1
   addMeshCollider: 1
   meshColliderConvex: 1
   impulseNearestN: 3
@@ -770,13 +767,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182278898}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.99434924, w: -0.10615875}
-  m_LocalPosition: {x: -3.8, y: 5.83, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.40616706, w: 0.9137989}
+  m_LocalPosition: {x: -1.19, y: 14.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 192.188}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 47.929}
 --- !u!1 &1535641707
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +817,6 @@ MonoBehaviour:
   projectionDistance: 0.01
   projectionAngle: 1
   recalcNormals: 1
-  ignoreSelfMeshSphereCollision: 1
   addMeshCollider: 1
   meshColliderConvex: 1
   impulseNearestN: 3
@@ -887,13 +883,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535641707}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.18161406, w: 0.9833699}
-  m_LocalPosition: {x: -4.53, y: 10.16, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.64, y: 7.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 20.928}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2000447495
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,7 +964,6 @@ MonoBehaviour:
   projectionDistance: 0.01
   projectionAngle: 1
   recalcNormals: 1
-  ignoreSelfMeshSphereCollision: 1
   addMeshCollider: 1
   meshColliderConvex: 1
   impulseNearestN: 3
@@ -1035,13 +1030,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059572746}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 6.22, y: 3.17, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: 0.7071068, z: -0, w: 0}
+  m_LocalPosition: {x: 8.849999, y: 15.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: -90}
 --- !u!1001 &1382511623928216699
 PrefabInstance:
   m_ObjectHideFlags: 0

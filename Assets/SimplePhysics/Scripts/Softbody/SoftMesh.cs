@@ -31,7 +31,6 @@ public class SoftMesh : MonoBehaviour
     public bool recalcNormals = true;
 
     [Header("Self-Collision Ignore (MeshCollider vs own spheres)")]
-    public bool ignoreSelfMeshSphereCollision = true;
     public bool addMeshCollider = true;
     public bool meshColliderConvex = false;
     MeshCollider _meshCollider;
@@ -151,7 +150,7 @@ public class SoftMesh : MonoBehaviour
         Physics.SyncTransforms();
 
 
-        if (ignoreSelfMeshSphereCollision)
+        if (addMeshCollider)
         {
             // parent colliders (includes MeshCollider you just added)
             var parentCols = GetComponents<Collider>();
