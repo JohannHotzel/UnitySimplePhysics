@@ -1,0 +1,77 @@
+#pragma kernel Simulate
+#pragma kernel ApplyImpact
+
+StructuredBuffer<float3> _Rest;
+RWStructuredBuffer<float3> _Pos;
+RWStructuredBuffer<float3> _Vel;
+
+uint _VertexCount;
+
+float _DT;
+float _SpringK;
+float _Damping;
+
+// impact params
+float3 _ImpactPointWS;
+float3 _PushDirWS;
+float _Kick;
+float _MaxDistance;
+
+float4x4 _L2W;
+float4x4 _W2L;
+
+[numthreads(256, 1, 1)]
+void Simulate(uint3 id : SV_DispatchThreadID)
+{
+    uint i = id.x;
+    if (i >= _VertexCount)
+        return;
+
+    float3 x = _Pos[i];
+    float3 x0 = _Rest[i];
+    float3 v = _Vel[i];
+
+    // F = -k(x-x0) - c v
+    float3 springForce = -_SpringK * (x - x0);
+    float3 dampingForce = -_Damping * v;
+
+    
+    float3 a = (springForce + dampingForce);
+
+    // semi-implicit euler
+    v += a * _DT;
+    x += v * _DT;
+
+    _Vel[i] = v;
+    _Pos[i] = x;
+}
+
+[numthreads(256, 1, 1)]
+void ApplyImpact(uint3 id : SV_DispatchThreadID)
+{
+    uint i = id.x;
+    if (i >= _VertexCount)
+        return;
+
+    float3 xLS = _Pos[i];
+
+    // local -> world
+    float4 xWS4 = mul(_L2W, float4(xLS, 1.0));
+    float3 xWS = xWS4.xyz;
+
+    float dist = distance(xWS, _ImpactPointWS);
+    if (dist > _MaxDistance)
+        return;
+
+    float t = saturate(dist / _MaxDistance);
+    // SmoothStep(1->0)
+    float w = (1.0 - t);
+    w = w * w * (3.0 - 2.0 * w);
+
+    float3 dvWS = _PushDirWS * (_Kick * w);
+
+    // world vector -> local vector
+    float3 dvLS = mul((float3x3) _W2L, dvWS);
+
+    _Vel[i] -= dvLS;
+}
