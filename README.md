@@ -84,3 +84,16 @@ Mesh deformation, optional collider updates, and collision impulse handling work
 
 
 
+## 🔗 EmbeddedSoftBody  
+**Surface-sampled joint soft body with mesh skinning**
+
+EmbeddedSoftBody distributes prefab `rigidbodie` points across a mesh surface using Poisson disk sampling.  
+These points are connected with `ConfigurableJoint`s based on nearest neighbors to form the simulation structure.
+
+At runtime, the mesh is cloned and bound to the simulated points.  
+Each vertex is influenced by up to four nearby rigidbodies using weighted skinning, and the mesh vertices are updated every frame from the current rigidbody transforms.
+
+An optional mesh collider can be generated and updated dynamically.  
+Collision impulses can be relayed to nearby rigidbodies.
+
+![EmbeddedSoftBody Image](Images/EmbeddedSoftBody.gif)
