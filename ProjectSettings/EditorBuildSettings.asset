@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/SimplePhysics/Scenes/Cloth.unity
     guid: db8994531bea2f54a871c630ce082b49
   - enabled: 0
-    path: Assets/SimplePhysics/Scenes/SoftBody.unity
+    path: Assets/SimplePhysics/Scenes/Soft Body/SoftBody.unity
     guid: 0d6e6cab497968043b764f859170094a
   - enabled: 0
     path: Assets/SimplePhysics/Scenes/SoftMeshLite.unity

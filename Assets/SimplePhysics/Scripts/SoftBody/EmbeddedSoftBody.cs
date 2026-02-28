@@ -757,7 +757,7 @@ public class EmbeddedSoftBody : MonoBehaviour
     // ------------------------------------------------------------
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.cyan;
+        Gizmos.color = Color.red;
 
         var root = transform.Find(pointsContainerName);
         if (!root) return;
